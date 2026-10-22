@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Chặn mọi kết nối ra ngoài: trang không thể gửi dữ liệu đi đâu -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Đăng ký nhận tài liệu</title>
+<style>
+  :root { --ink:#1d2433; --muted:#5b6474; --line:#d5d9e0; --bg:#f3f4f6; --accent:#1f3864; --warn:#e0a100; }
+  * { box-sizing: border-box; }
+  body { margin:0; padding:0 12px; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+  .card { max-width:520px; margin:24px auto; background:#fff; border:1px solid var(--line); border-radius:12px; padding:24px 20px; }
+  .brand { font-weight:700; letter-spacing:.5px; color:var(--accent); }
+  h1 { font-size:22px; margin:8px 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  label { display:block; font-weight:600; margin:14px 0 6px; }
+  .req { color:#c0392b; }
+  input[type=text], input[type=tel], input[type=email] { width:100%; padding:12px; font-size:16px; border:1px solid var(--line); border-radius:8px; }
+  input:focus { outline:2px solid var(--accent); outline-offset:1px; }
+  .check { display:flex; gap:10px; align-items:flex-start; margin:18px 0 6px; font-weight:400; }
+  .check input { width:20px; height:20px; margin:2px 0 0; }
+  button.submit { width:100%; margin-top:18px; padding:14px; font-size:16px; font-weight:700; color:#fff; background:var(--accent); border:0; border-radius:8px; cursor:pointer; }
+  .overlay { position:fixed; inset:0; background:rgba(15,20,30,.55); display:flex; align-items:center; justify-content:center; padding:16px; }
+  .overlay[hidden] { display:none; }
+  .modal { background:#fff; max-width:480px; width:100%; max-height:100%; overflow:auto; border-radius:12px; border-top:6px solid var(--warn); padding:22px 20px; }
+  .modal h2 { font-size:20px; margin:0 0 10px; }
+  .safe { font-weight:700; background:#fff7e0; border-radius:8px; padding:10px 12px; margin:0 0 14px; }
+  .x { list-style:none; padding:0; margin:6px 0 14px; }
+  .x li { padding:4px 0 4px 26px; position:relative; }
+  .x li::before { content:"✗"; position:absolute; left:4px; color:#c0392b; font-weight:700; }
+  .tip { border-left:4px solid var(--accent); padding:6px 12px; margin:14px 0 18px; }
+  a.go { display:block; text-align:center; padding:14px; font-weight:700; color:#fff; background:var(--accent); border-radius:8px; text-decoration:none; }
+  a.go.off { background:#9aa3b2; pointer-events:none; }
+  button.close { display:block; margin:12px auto 0; background:none; border:0; color:var(--muted); font-size:15px; text-decoration:underline; cursor:pointer; }
+  .foot { color:var(--muted); font-size:13px; text-align:center; margin:14px 0 0; }
+</style>
+</head>
+<body>
+
+<main class="card">
+  <div class="brand" data-brand></div>
+  <h1>Đăng ký nhận tài liệu</h1>
+  <p class="sub">Điền thông tin bên dưới để nhận bộ tài liệu miễn phí.</p>
+
+  <form id="form1" autocomplete="on">
+    <label for="ten">Họ và tên <span class="req">*</span></label>
+    <input id="ten" type="text" autocomplete="name" required>
+
+    <label for="sdt">Số điện thoại <span class="req">*</span></label>
+    <input id="sdt" type="tel" autocomplete="tel" required>
+
+    <label for="email">Email <span class="req">*</span></label>
+    <input id="email" type="email" autocomplete="email" required>
+
+    <label for="congty">Công ty <span class="req">*</span></label>
+    <input id="congty" type="text" autocomplete="organization" required>
+
+    <label for="chucvu">Chức vụ <span class="req">*</span></label>
+    <input id="chucvu" type="text" autocomplete="organization-title" required>
+
+    <label class="check"><input type="checkbox" checked> Tôi đồng ý với các điều khoản</label>
+
+    <button class="submit" type="submit">Nhận tài liệu</button>
+  </form>
+</main>
+
+<div class="overlay" id="popup" hidden role="dialog" aria-modal="true" aria-labelledby="popup-title">
+  <div class="modal">
+    <h2 id="popup-title" tabindex="-1">Khoan đã, đây là một bài thử nhỏ.</h2>
+    <p class="safe">Thông tin bạn vừa nhập KHÔNG được gửi đi hay lưu lại.</p>
+    <p>Form vừa rồi:</p>
+    <ul class="x">
+      <li>Không cho biết ai thu thập</li>
+      <li>Không nói để làm gì</li>
+      <li>Không nói lưu bao lâu</li>
+      <li>Không có cách rút lại đồng ý</li>
+      <li>Tích sẵn ô "Tôi đồng ý", điều mà quy định hiện hành không cho phép</li>
+    </ul>
+    <p>Những thông tin này đủ để kẻ xấu giả danh đối tác, gọi điện hoặc gửi email lừa đảo nhắm vào bạn.</p>
+    <p class="tip">Trước khi điền, hãy hỏi: <b>Ai thu? Để làm gì? Giữ bao lâu?</b></p>
+    <a class="go" id="go">Nhận tài liệu đúng cách</a>
+    <button class="close" id="close" type="button">Đóng</button>
+    <p class="foot">Bài thử nhận thức do <span data-brand></span> thực hiện.</p>
+  </div>
+</div>
+
+<script>
+  // ===== CẤU HÌNH: chỉ cần sửa 2 dòng này =====
+  var FORM2_URL = 'DAN_LINK_FORM_2_VAO_DAY';   // link Google Form 2
+  var BRAND = '405CYSE';                        // tên thương hiệu hiển thị
+  // ============================================
+
+  document.querySelectorAll('[data-brand]').forEach(function (el) { el.textContent = BRAND; });
+
+  var form = document.getElementById('form1');
+  var popup = document.getElementById('popup');
+  var go = document.getElementById('go');
+
+  if (/^https:\/\//.test(FORM2_URL)) { go.href = FORM2_URL; } else { go.classList.add('off'); }
+
+  // Bấm "Nhận tài liệu": không gửi đi đâu cả, chỉ xoá trắng form và hiện popup.
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    form.reset();
+    popup.hidden = false;
+    document.getElementById('popup-title').focus();
+  });
+
+  function closePopup() { popup.hidden = true; }
+  document.getElementById('close').addEventListener('click', closePopup);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closePopup(); });
+</script>
+</body>
+</html>
